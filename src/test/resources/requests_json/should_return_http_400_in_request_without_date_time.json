@@ -1,0 +1,12 @@
+{
+	"date_time": "",
+	"messages": [
+		{
+			"type": "EMAIL",
+			"sender": "fulano@sender.com.br",
+			"recipient": "fulano@recipient.com.br",
+			"subject": "Email Test",
+			"content": "I'm testing my email schedule"
+		}
+	]
+}
