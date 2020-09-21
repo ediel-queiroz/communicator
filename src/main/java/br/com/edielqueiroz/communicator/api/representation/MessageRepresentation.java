@@ -25,4 +25,6 @@ public class MessageRepresentation implements Serializable {
 	@NotBlank
 	private String content;
 
+	private String status;
+
 }
