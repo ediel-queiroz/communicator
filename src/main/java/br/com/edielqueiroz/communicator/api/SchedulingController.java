@@ -2,24 +2,31 @@ package br.com.edielqueiroz.communicator.api;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.validation.Valid;
 
+import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.edielqueiroz.communicator.api.representation.SchedulingRepresentation;
 import br.com.edielqueiroz.communicator.model.Scheduling;
+import br.com.edielqueiroz.communicator.model.Scheduling.Status;
 import br.com.edielqueiroz.communicator.service.SchedulingService;
 
 @RestController
@@ -49,7 +56,7 @@ public class SchedulingController {
 	}
 
 	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-	ResponseEntity<?> findSchedules(@PathVariable(value = "id") final Long id) {
+	ResponseEntity<?> findScheduling(@PathVariable final Long id) {
 		try {
 			Optional<Scheduling> scheduling = service.findById(id);
 
@@ -61,6 +68,39 @@ public class SchedulingController {
 		} catch (NoSuchElementException e) {
 			return ResponseEntity.notFound().build();
 		}
+	}
+
+	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	ResponseEntity<?> findSchedules(@RequestParam(required = false) final String status) {
+
+		try {
+			Iterable<Scheduling> schedules;
+
+			if (hasStatus(status)) {
+				schedules = service.findByStatus(Status.valueOf(status));
+			} else {
+				schedules = service.findAll();
+			}
+
+			List<SchedulingRepresentation> representations = StreamSupport.stream(schedules.spliterator(), false)
+					.map(s -> convertToRepresentation(s)).collect(Collectors.toList());
+
+			return ResponseEntity.ok(representations);
+
+		} catch (IllegalArgumentException | NullPointerException e) {
+			return ResponseEntity.badRequest().build();
+		}
+
+	}
+
+	private boolean hasStatus(final String status) {
+		return StringUtils.isNotBlank(status);
+	}
+
+	@DeleteMapping(path = "/{id}")
+	ResponseEntity<?> deleteScheduling(@PathVariable final Long id) {
+		service.deleteById(id);
+		return ResponseEntity.noContent().build();
 	}
 
 	private Scheduling convertToEntity(final SchedulingRepresentation representation) {
