@@ -6,6 +6,10 @@
 
 `mvn clean install`
 
+## Test
+
+`mvn clean test`
+
 ## Run with maven
 
 ##### In this case, the database used is H2 (in memory database)
@@ -36,6 +40,8 @@ http://localhost:8080/swagger-ui.html
 ###### To send a scheduling
 
 `curl -v -X POST -H 'Content-Type: application/json' -d '{"date_time":"2020-09-26T10:15:30","messages":[{"type":"EMAIL","sender":"test@sender.com.br","recipient":"test@recipient.com.br","subject":"Email Test","content":"I am testing my email scheduling"}]}' http://localhost:8080/v1/schedules`
+
+###### OBS: The available types are EMAIL, SMS, PUSH and WHATSAPP
 
 ###### To get a scheduling
 
