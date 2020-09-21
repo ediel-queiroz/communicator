@@ -111,4 +111,10 @@ public class SchedulingApiTests {
 
 	}
 
+	@Test
+	public void shouldReturn400WhenDeletingNonExistingScheduling() throws Exception {
+		this.mockMvc.perform(delete(TestsConstants.API_URI + "/999")).andExpect(status().isBadRequest());
+
+	}
+
 }
