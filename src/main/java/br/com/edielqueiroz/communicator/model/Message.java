@@ -1,20 +1,16 @@
 package br.com.edielqueiroz.communicator.model;
 
-import java.util.UUID;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+
+import lombok.Data;
 
 @Entity
-public class Message {
+@Data
+public class Message extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID uuid;
+	private static final long serialVersionUID = 5256470338208528101L;
+
 	private Type type;
 	private String sender;
 	private String recipient;
@@ -22,8 +18,6 @@ public class Message {
 	private String content;
 	private Status status;
 
-	@ManyToOne
-	@JoinColumn(name = "scheduling_uuid")
 	private Scheduling scheduling;
 
 	public enum Type {
@@ -32,6 +26,11 @@ public class Message {
 
 	public enum Status {
 		PENDING, SENT
+	}
+
+	@PrePersist
+	public void prePersist() {
+		this.status = Status.PENDING;
 	}
 
 }

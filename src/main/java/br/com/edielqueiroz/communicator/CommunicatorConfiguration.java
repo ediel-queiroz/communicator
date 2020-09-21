@@ -9,8 +9,7 @@ public class CommunicatorConfiguration {
 
 	@Bean
 	public ModelMapper modelMapper() {
-		ModelMapper mapper = new ModelMapper();
-		return mapper;
+		return new ModelMapper();
 
 	}
 
