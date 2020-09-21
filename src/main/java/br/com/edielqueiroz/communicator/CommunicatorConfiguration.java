@@ -10,7 +10,6 @@ public class CommunicatorConfiguration {
 	@Bean
 	public ModelMapper modelMapper() {
 		return new ModelMapper();
-
 	}
 
 }
