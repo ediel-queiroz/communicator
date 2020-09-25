@@ -18,7 +18,7 @@
 
 ## Run in containers using Docker and Docker Compose
 
-###### In this case, the database used is PostgreSQL. **Note:** Docker and Docker Compose is necessary.
+###### In this case, the database used is PostgreSQL. **Note:** Docker and Docker Compose are necessary.
 
 `mvn clean install`
 
